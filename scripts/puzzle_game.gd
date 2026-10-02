@@ -58,6 +58,10 @@ var is_dead: bool = false
 @onready var sfx_win = $AudioPlayers/SfxWin
 @onready var sfx_ui_undo = $AudioPlayers/SfxUiUndo
 @onready var sfx_ui_restart = $AudioPlayers/SfxUiRestart
+@onready var music_bed = $AudioPlayers/MusicBed
+
+# Fall SFX debounce — multiple segments can emit fall_impact in one settle
+var _fall_sfx_cooldown_until_ms: int = 0
 
 # Juice/feedback signals - connect these to VFX and audio later
 signal move_settled(head_pos: Vector2i, direction: Vector2i)
@@ -87,6 +91,32 @@ func _ready():
 	win_triggered.connect(_on_win_triggered)
 	ui_undo_input.connect(_on_ui_undo_input)
 	ui_restart_input.connect(_on_ui_restart_input)
+	_bind_chord_audio()
+
+func _bind_chord_audio() -> void:
+	# Chord v1.5: bind original procedural streams onto Vera's stub players
+	if sfx_move_settle:
+		sfx_move_settle.stream = ChordAudioBank.move_settle()
+	if sfx_fall_impact:
+		sfx_fall_impact.stream = ChordAudioBank.fall_impact()
+	if sfx_fruit_collect:
+		sfx_fruit_collect.stream = ChordAudioBank.fruit_collect()
+	if sfx_grow:
+		sfx_grow.stream = ChordAudioBank.grow()
+	if sfx_exit_unlock:
+		sfx_exit_unlock.stream = ChordAudioBank.exit_unlock()
+	if sfx_death:
+		sfx_death.stream = ChordAudioBank.death()
+	if sfx_undo_restore:
+		sfx_undo_restore.stream = ChordAudioBank.undo_restore()
+	if sfx_win:
+		sfx_win.stream = ChordAudioBank.win()
+	if sfx_ui_undo:
+		sfx_ui_undo.stream = ChordAudioBank.ui_undo()
+	if sfx_ui_restart:
+		sfx_ui_restart.stream = ChordAudioBank.ui_restart()
+	if music_bed:
+		music_bed.stream = ChordAudioBank.music_bed()
 
 func load_level(level: LevelData):
 	level_data = level
@@ -103,6 +133,8 @@ func load_level(level: LevelData):
 	if hud:
 		hud.set_level_name(level.level_name)
 		hud.update_fruit_count(fruits_remaining.size())
+	if music_bed and music_bed.stream and not music_bed.playing:
+		music_bed.play()
 
 func _input(event):
 	if is_animating or is_won or is_dead:
@@ -417,7 +449,11 @@ func _on_move_settled(head_pos: Vector2i, direction: Vector2i):
 func _on_fall_impact(segment_index: int, landed_pos: Vector2i):
 	# JUICE 2: Fall impact
 	# TODO VFX: impact rings, dust, screen shake (proportional to fall distance)
-	# TODO Audio: thud sound (varies by segment type and fall height)
+	# Audio: debounced thud so multi-segment landings don't stack into noise
+	var now := Time.get_ticks_msec()
+	if now < _fall_sfx_cooldown_until_ms:
+		return
+	_fall_sfx_cooldown_until_ms = now + 50
 	if sfx_fall_impact and sfx_fall_impact.stream:
 		sfx_fall_impact.play()
 
@@ -463,7 +499,7 @@ func _on_win_triggered(exit_position: Vector2i):
 	# JUICE 6: Win flourish
 	# TODO VFX: fireworks, confetti, creature celebration animation, exit glow intensifies
 	# TODO Camera: zoom to exit, victory pose
-	# TODO Audio: victory fanfare, cheers
+	# Audio: short warm triad (readable, not carnival)
 	if sfx_win and sfx_win.stream:
 		sfx_win.play()
 

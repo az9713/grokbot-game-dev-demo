@@ -15,21 +15,42 @@ zoom = Vector2(1.5, 1.5)
 [node name="AudioPlayers" type="Node" parent="."]
 
 [node name="SfxMoveSettle" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"SFX"
+volume_db = -4.0
 
 [node name="SfxFallImpact" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"SFX"
+volume_db = -2.0
 
 [node name="SfxFruitCollect" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"SFX"
 
 [node name="SfxGrow" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"SFX"
+volume_db = -2.0
 
 [node name="SfxExitUnlock" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"SFX"
 
 [node name="SfxDeath" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"SFX"
 
 [node name="SfxUndoRestore" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"SFX"
+volume_db = -3.0
 
 [node name="SfxWin" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"SFX"
+volume_db = -1.0
 
 [node name="SfxUiUndo" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"UI"
+volume_db = -6.0
 
 [node name="SfxUiRestart" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"UI"
+volume_db = -6.0
+
+[node name="MusicBed" type="AudioStreamPlayer" parent="AudioPlayers"]
+bus = &"Music"
+volume_db = -18.0

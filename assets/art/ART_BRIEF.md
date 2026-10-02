@@ -123,3 +123,50 @@ Import settings: Filter **on** (soft painted), Mipmaps optional; 2D pixel snap *
 ## Regeneration
 
 Sprites were authored with a deterministic Python/Pillow paint script (soft blobs + grain). Re-run only if intentionally revising the look; keep filenames stable for Devin’s paths.
+
+---
+
+## v1.5 delta — Moss Ledger visual elevation (Ari Art)
+
+**Date:** 2026-09-18 (PT)  
+**Goal:** Richer soft-painted tiles/actors + VFX frames for Vera Play juice hooks. Same filenames / 64px gameplay grid so Godot preloads stay valid. Original Moss Ledger only (no Snakebird/IP copies). Silhouette/readability over decoration.
+
+### Regenerated gameplay / UI sprites (Pillow soft blobs + grain)
+
+| File | Size | Notes |
+|------|------|-------|
+| `assets/art/tile_solid.png` | 64×64 | Moss block, top highlight, bottom shadow, lichen grain |
+| `assets/art/tile_empty.png` | 64×64 | Soft parchment/fog wash + tiny grass tufts |
+| `assets/art/tile_void.png` | 64×64 | Abyss vignette + faint stars |
+| `assets/art/tile_spike.png` | 64×64 | Three iron spikes up; tip gleam `#C45A4A` |
+| `assets/art/bird_head.png` | 64×64 | Chubby head faces **RIGHT**; beak + eye |
+| `assets/art/bird_body.png` | 64×64 | Round segment + belly |
+| `assets/art/bird_tail.png` | 64×64 | Feathers taper left |
+| `assets/art/fruit.png` | 64×64 | Orange orb + leaf |
+| `assets/art/exit_locked.png` | 64×64 | Gray stone arch + padlock |
+| `assets/art/exit_open.png` | 64×64 | Green arch + soft glow core |
+| `assets/art/ui_panel.png` | 256×48 | Warm plaque HUD bar |
+| `assets/art/ui_button.png` | 96×48 | 9-slice friendly (~12 radius) |
+| `assets/art/fruit_icon.png` | 28×28 | HUD counter icon |
+| `assets/art/atlas.png` | 320×128 | Sheet rebuilt to match `atlas.json` frames |
+| `assets/art/atlas.json` | — | Unchanged frame layout (tile_size 64) |
+
+### New VFX frames (`assets/art/vfx/`) — Vera Play juice hooks
+
+| VFX file | Hook / event | Intent |
+|----------|--------------|--------|
+| `vfx_move_dust.png` | `move_settled` | Soft dust puff at feet when a move settles |
+| `vfx_fall_dust.png` | `fall_impact` | Ground impact dust on fall land |
+| `vfx_fruit_burst.png` | `fruit_collected` | Orange burst shards (readable, short) |
+| `vfx_grow_glow.png` | `creature_grew` | Soft cyan/blue grow ring around body |
+| `vfx_exit_unlock.png` | `exit_unlocked` | Green unlock sparkles + soft glow |
+| `vfx_death_spike.png` | `death_triggered` (spike) | Red iron flash shards |
+| `vfx_death_void.png` | `death_triggered` (void) | Dark swirl sink |
+| `vfx_undo_ghost.png` | `undo_restored` | Translucent bird ghost silhouette |
+| `vfx_win_flourish.png` | `win_triggered` | Soft glow rays only — **no confetti spam** |
+
+All VFX are 64×64 RGBA PNG with transparency. Keep playback short and silhouette-clear at gameplay scale.
+
+### Out of scope (unchanged)
+
+Rules, gravity, fruit growth logic, undo stack, level `.tres` data, `TileType` enum values.
